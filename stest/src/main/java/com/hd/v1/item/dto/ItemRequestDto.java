@@ -11,9 +11,9 @@ import lombok.*;
 @Builder
 public class ItemRequestDto {
     Long id;
-    @NotEmpty(message = "Name cannot be empty")
+    @NotEmpty(message = "{validation.item.name}")
     String name;
-    @Min(value=10, message = "10이상이어야함")
+    @Min(value=10, message = "{validation.item.price}")
     Long price;
 
     public ItemEntity toEntity() {
