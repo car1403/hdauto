@@ -21,7 +21,8 @@ public class GlobalExceptionHandler {
     }
 
     // User Define Exception
-    @ExceptionHandler({EmailNotFoundException.class, NameDuplicateException.class,IdNotFoundException.class, DataNotFoundException.class })
+    @ExceptionHandler({EmailNotFoundException.class, NameDuplicateException.class,IdNotFoundException.class,
+            DataNotFoundException.class })
     public ResponseEntity<?> handleEmailNotFoundException(Exception ex){
         ErrorCode code = null;
         String msg = null;

@@ -66,7 +66,6 @@ public class ControllerGetTest {
                 .andExpect(jsonPath("$.data.id").value(10L))
                 .andExpect(jsonPath("$.data.name").value("p1"))
                 .andExpect(jsonPath("$.data.price").value(1000L))
-
                 .andDo(print());
         verify(itemService).get(refEq(id));
     }
