@@ -44,7 +44,8 @@ dependencies {
     // 6. validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-
+    // 7. path test
+    testImplementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 
     // 1. Lombok Test
     testImplementation 'org.projectlombok:lombok'
