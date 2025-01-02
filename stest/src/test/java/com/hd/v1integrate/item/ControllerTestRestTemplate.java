@@ -126,7 +126,8 @@ public class ControllerTestRestTemplate {
 
         // when
 
-        ResponseEntity<String> responseEntity = testRestTemplate.exchange(getBaseUrl("update"),HttpMethod.PATCH,requestEntity,String.class);
+        ResponseEntity<String> responseEntity =
+                testRestTemplate.exchange(getBaseUrl("update"),HttpMethod.PATCH,requestEntity,String.class);
         log.info("Update ResponseEntity -------------"+responseEntity.toString());
         log.info("Update Body -------------"+responseEntity.getBody().toString());
 

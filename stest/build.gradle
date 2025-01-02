@@ -47,6 +47,10 @@ dependencies {
     // 7. patch test
     testImplementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 
+
+    //8. Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
     // 1. Lombok Test
     testImplementation 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
