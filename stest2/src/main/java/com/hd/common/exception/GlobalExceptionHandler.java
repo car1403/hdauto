@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
 
     // User Define Exception
     @ExceptionHandler({EmailNotFoundException.class, NameDuplicateException.class,IdNotFoundException.class,
-            DataNotFoundException.class })
+            DataNotFoundException.class,IdDuplicateException.class })
     public ResponseEntity<?> handleEmailNotFoundException(Exception ex){
         ErrorCode code = null;
         String msg = null;
@@ -34,6 +34,9 @@ public class GlobalExceptionHandler {
             code = ((IdNotFoundException)ex).getErrorCode();
             msg = ((IdNotFoundException)ex).getMessage();
         }else if(ex instanceof  DataNotFoundException){
+            code = ((DataNotFoundException)ex).getErrorCode();
+            msg = ((DataNotFoundException)ex).getMessage();
+        }else if(ex instanceof  IdDuplicateException){
             code = ((DataNotFoundException)ex).getErrorCode();
             msg = ((DataNotFoundException)ex).getMessage();
         }
