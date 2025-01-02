@@ -1,0 +1,143 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.8-SNAPSHOT'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco'
+}
+jacoco {
+    toolVersion = "0.8.8"
+}
+group = 'com.hd'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/snapshot' }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // 3. MySQL Driver
+    implementation 'com.mysql:mysql-connector-j:8.1.0'
+    // 4. JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // 5. H2DB
+    runtimeOnly 'com.h2database:h2'
+
+    // 6. validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // 7. patch test
+    testImplementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
+
+
+    //8. Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    // 1. Lombok Test
+    testImplementation 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    jvmArgs '-Xshare:off'
+}
+test {
+    // finalizedBy : 이(test) 작업에 대해 주어진 종료자 작업을 추가
+    finalizedBy jacocoTestReport // test 작업이 끝나고 jacocoTestReport를 실행
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.required = true
+        xml.required = false
+    }
+
+    // 결과 리포트에서 제외할 클래스들
+    def Qdomains = []
+    for (qPattern in '**/QA'..'**/QZ') {
+        Qdomains.add(qPattern + '*')
+    }
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: [
+                            "**/*Application*",
+                            "**/*Mapper*",
+                            "**/*Provider*",
+                            "**/*Config*",
+                            "**/*Util*",
+                            "**/*Request*",
+                            "**/*Response*",
+                            "**/*Entity*",
+                            "**/common",
+                    ] + Qdomains)
+                })
+        )
+    }
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+
+jacocoTestCoverageVerification {
+    def Qdomains = []
+    for (qPattern in '*.QA'..'*.QZ') {
+        Qdomains.add(qPattern + '*')
+    }
+
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+            includes = []
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.90
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.90
+            }
+            excludes = [
+                    "**.*Application*",
+                    "**.*Mapper*",
+                    "**.*Provider*",
+                    "**.*Config*",
+                    "**.*Request*",
+                    "**.*Response*",
+                    "**.*Entity*",
+            ] + Qdomains
+        }
+    }
+}
+
+
+
+
+
+
