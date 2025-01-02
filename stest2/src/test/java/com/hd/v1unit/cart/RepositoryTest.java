@@ -82,8 +82,8 @@ class RepositoryTest {
         cartRepository.save(cartEntity1);
         cartRepository.save(cartEntity2);
         // JPA 1차 캐쉬를 모두 삭제 즉 메모리에 있는 Entity 정보를 모두 삭제 후 테스트 진행 시 DB에 있는 데이터 조회
-//        testEntityManager.flush();
-//        testEntityManager.clear();
+        testEntityManager.flush();
+        testEntityManager.clear();
     }
 
     @Test
@@ -101,9 +101,67 @@ class RepositoryTest {
         //verify
         assertThat(cart.get().getCnt()).isEqualTo(1);
         assertThat(cart.get().getCust().getId()).isEqualTo(custEntity.getId());
-//        assertThat(cart.get().getItem().getName()).isEqualTo(itemEntity1.getName());
+        assertThat(cart.get().getItem().getName()).isEqualTo(itemEntity1.getName());
 
     }
+
+    // 특정 사용자 ID의 cart 내용 전체조회
+    @Test
+    @Order(2)
+    @DisplayName(" 2 특정 사용자 ID의 cart 내용 전체조회 ")
+    public void cartSelectByCustIdTest() {
+
+        //given
+
+        //when
+        List<CartEntity> carts = cartRepository.findByCustId("id01");
+
+        //verify
+        assertThat(carts.size()).isEqualTo(2);
+        assertThat(carts.get(0).getCnt()).isEqualTo(1);
+        assertThat(carts.get(1).getCnt()).isEqualTo(3);
+    }
+    // 특정 Cart Id 삭제
+    @Test
+    @Order(3)
+    @DisplayName(" 3 특정 Cart Id 삭제 ")
+    public void cartDeleteTest() {
+
+        //given
+
+        //when
+        cartRepository.deleteById(2L);
+        List<CartEntity> carts = cartRepository.findByCustId("id01");
+
+        //verify
+        assertThat(carts.size()).isEqualTo(1);
+        assertThat(carts.get(0).getCnt()).isEqualTo(1);
+    }
+    // 특정 Cart Id 수정
+    @Test
+    @Order(4)
+    @DisplayName(" 4 특정 Cart Id 수정 ")
+    public void cartUpdateTest() {
+
+        //given
+
+        //when
+        CartEntity updatecartEntity = CartEntity.builder().id(1L).cnt(10L)
+                .itemEntity(itemEntity1)
+                .custEntity(custEntity)
+                .build();
+
+        cartRepository.save(updatecartEntity);
+        List<CartEntity> carts = cartRepository.findByCustId("id01");
+        log.info(carts.toString());
+
+        //verify
+        assertThat(carts.size()).isEqualTo(2);
+        assertThat(carts.get(0).getCnt()).isEqualTo(10);
+        assertThat(carts.get(1).getCnt()).isEqualTo(3);
+    }
+
+
 
 //    @Test
 //    @Order(2)
