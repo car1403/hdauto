@@ -1,4 +1,5 @@
 package com.hd.v1.app.cart.service;
+import com.hd.common.exception.DataNotFoundException;
 import com.hd.common.exception.ErrorCode;
 import com.hd.common.exception.IdDuplicateException;
 import com.hd.common.exception.IdNotFoundException;
@@ -50,7 +51,7 @@ public class CartService implements HDService<CartEntity, Long> {
     public List<CartEntity> getall() {
         List<CartEntity> carts = cartRepository.findAll();
         if(carts.isEmpty()){
-            throw new IllegalArgumentException(ErrorCode.DATA_DOSE_NOT_EXIST.getErrorMessage());
+            throw new DataNotFoundException(ErrorCode.DATA_DOSE_NOT_EXIST.getErrorMessage(), ErrorCode.DATA_DOSE_NOT_EXIST);
         }
         return carts;
     }
