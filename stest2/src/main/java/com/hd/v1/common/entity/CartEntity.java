@@ -22,6 +22,9 @@ public class CartEntity extends BaseEntity {
     @JoinColumn(name="item_id")
     private ItemEntity item;
 
+    public void setCnt(Long cnt) {
+        this.cnt = cnt;
+    }
     @Builder
     public CartEntity(Long id, Long cnt, CustEntity custEntity, ItemEntity itemEntity) {
         this.id = id;
