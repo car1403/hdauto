@@ -15,6 +15,7 @@ import lombok.*;
 public class CartRequestDto {
     private Long id;
     private Long cnt;
+    @NotEmpty(message = "{validation.cart.cust}")
     private String custId;
     private Long itemId;
 
