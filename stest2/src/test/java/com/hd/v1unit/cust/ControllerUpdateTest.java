@@ -3,7 +3,7 @@ package com.hd.v1unit.cust;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hd.common.exception.ErrorCode;
 import com.hd.common.exception.IdDuplicateException;
-import com.hd.common.exception.NameDuplicateException;
+import com.hd.common.exception.IdNotFoundException;
 import com.hd.v1.app.cust.controller.CustController;
 import com.hd.v1.app.cust.dto.CustRequestDto;
 import com.hd.v1.app.cust.service.CustService;
@@ -26,73 +26,73 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 @Slf4j
 @WebMvcTest(controllers = CustController.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DisplayName("Cust Controller Save Test")
+//@AutoConfigureMockMvc
+//@SpringBootTest
 @Import(value = com.hd.common.dto.Response.class)
-public class ControllerSaveTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DisplayName(" Cust Controller Update Test ")
+public class ControllerUpdateTest {
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     CustService custService;
 
-
     private ObjectMapper objectMapper;
 
+
+
     @BeforeEach
-    public void setup(){
+    public void setup() {
         objectMapper = new ObjectMapper();
     }
 
     @Test
     @Order(1)
-    @DisplayName("Cust Save Test")
-    public void test1() throws Exception {
-        // given
-        String id = "id01";
-        String pwd = "pwd01";
-        String name = "name01";
+    @DisplayName("Cust Update 정상")
+    void success1() throws Exception {
 
-        CustRequestDto requestDto =
-                CustRequestDto.builder()
-                        .id(id)
-                        .pwd(pwd)
-                        .name(name)
-                        .build();
-        String body = objectMapper.writeValueAsString(requestDto);
-        // stub        when(itemRepository.save(any())).thenReturn(itemEntity);
-        given(custService.save(any())).willReturn(
-                CustEntity.builder()
-                        .id(id)
-                        .pwd(pwd)
-                        .name(name)
-                        .build()
-        );
-        // when
-        ResultActions resultActions =
-                mockMvc.perform(post("/api/cust/add")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(body));
-        // then
-        resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.data.id").value(id));
-        resultActions.andExpect(jsonPath("$.data.pwd").value(pwd));
-        resultActions.andExpect(jsonPath("$.data.name").value(name));
-        resultActions.andDo(print());
-        verify(custService).save( refEq(CustEntity.builder()
-                .id(id)
-                .pwd(pwd)
-                .name(name)
-                .build()));
+        //given
+        CustRequestDto reqDto = CustRequestDto.builder()
+                .id("id01")
+                .pwd("pwd01")
+                .name("james01")
+                .build();
+        String body = new ObjectMapper().writeValueAsString(reqDto); // json 으로 변경한것
+
+
+        //stub
+        given(custService.modify(any())).willReturn(CustEntity.builder()
+                .id("id01")
+                .pwd("pwd01")
+                .name("james01")
+                .build());
+
+        //when
+        ResultActions resultActions= mockMvc.perform(patch("/api/cust/update")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(body));
+
+
+        //verify
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value("id01"))
+                .andExpect(jsonPath("$.data.name").value("james01"))
+                .andExpect(jsonPath("$.data.pwd").value("pwd01"))
+                .andDo(print());
+        verify(custService).modify(refEq(reqDto.toEntity()));
+        //verify(itemService).modify(reqreqDto.toEntity());
     }
-
-    // Validated Id
     @Test
     @Order(2)
     @DisplayName("Validated Id Test")
@@ -112,7 +112,7 @@ public class ControllerSaveTest {
         String body = objectMapper.writeValueAsString(requestDto);
         // when
         ResultActions resultActions =
-                mockMvc.perform(post("/api/cust/add")
+                mockMvc.perform(patch("/api/cust/update")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(body));
         // then
@@ -142,7 +142,7 @@ public class ControllerSaveTest {
         String body = objectMapper.writeValueAsString(requestDto);
         // when
         ResultActions resultActions =
-                mockMvc.perform(post("/api/cust/add")
+                mockMvc.perform(patch("/api/cust/update")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(body));
         // then
@@ -171,7 +171,7 @@ public class ControllerSaveTest {
         String body = objectMapper.writeValueAsString(requestDto);
         // when
         ResultActions resultActions =
-                mockMvc.perform(post("/api/cust/add")
+                mockMvc.perform(patch("/api/cust/update")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(body));
         // then
@@ -182,10 +182,9 @@ public class ControllerSaveTest {
                 .andExpect(jsonPath("$.error.[0].message").value("Name cannot be empty"));
     }
 
-    // Duplicated Name Exception
     @Test
     @Order(5)
-    @DisplayName("Duplicated Id Test")
+    @DisplayName("ID Not Found")
     public void test5() throws Exception {
         //given
         String id = "id01";
@@ -200,21 +199,22 @@ public class ControllerSaveTest {
                         .build();
         String body = objectMapper.writeValueAsString(requestDto);
         // stub
-        given(custService.save(any())).willThrow(
-            new IdDuplicateException(ErrorCode.ID_DUPLICATED.getErrorMessage(),
-                    ErrorCode.ID_DUPLICATED)
+        given(custService.modify(any())).willThrow(
+                new IdNotFoundException(ErrorCode.ID_NOT_FOUND.getErrorMessage(),
+                        ErrorCode.ID_NOT_FOUND)
         );
         // when
         ResultActions resultActions =
-                mockMvc.perform(post("/api/cust/add")
+                mockMvc.perform(patch("/api/cust/update")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(body));
         // then
         resultActions.andDo(print());
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.state").value(500))
-                .andExpect(jsonPath("$.message").value(ErrorCode.ID_DUPLICATED.getErrorMessage()))
-                .andExpect(jsonPath("$.data.errorCode").value(ErrorCode.ID_DUPLICATED.getErrorCode()));
+                .andExpect(jsonPath("$.message").value(ErrorCode.ID_NOT_FOUND.getErrorMessage()))
+                .andExpect(jsonPath("$.data.errorCode").value(ErrorCode.ID_NOT_FOUND.getErrorCode()));
     }
 
 }
+

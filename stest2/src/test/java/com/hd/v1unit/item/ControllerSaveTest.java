@@ -18,7 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -72,6 +74,7 @@ public class ControllerSaveTest {
         resultActions.andExpect(jsonPath("$.data.name").value("p1"));
         resultActions.andExpect(jsonPath("$.data.price").value(10000L));
         resultActions.andDo(print());
+        verify(itemService).save(refEq(requestDto.toEntity()));
     }
 
     // Validated Name

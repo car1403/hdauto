@@ -55,9 +55,9 @@ public class Response {
      * @param msg 응답 바디 message 필드에 포함될 정보
      * @return 응답 객체
      */
-    public    ResponseEntity<?> success(String msg) {
-        return success(Collections.emptyList(), msg, HttpStatus.OK);
-    }
+//    public    ResponseEntity<?> success(String msg) {
+//        return success(Collections.emptyList(), msg, HttpStatus.OK);
+//    }
 
     /**
      * <p> 데이터만 가진 성공 응답을 반환한다.</p>

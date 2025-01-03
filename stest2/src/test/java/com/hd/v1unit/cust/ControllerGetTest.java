@@ -1,10 +1,13 @@
-package com.hd.v1unit.item;
+package com.hd.v1unit.cust;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hd.common.exception.ErrorCode;
 import com.hd.common.exception.IdNotFoundException;
+import com.hd.v1.app.cust.controller.CustController;
+import com.hd.v1.app.cust.service.CustService;
 import com.hd.v1.app.item.controller.ItemController;
 import com.hd.v1.app.item.service.ItemService;
+import com.hd.v1.common.entity.CustEntity;
 import com.hd.v1.common.entity.ItemEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -26,16 +29,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @Slf4j
-@WebMvcTest(controllers = ItemController.class)
+@WebMvcTest(controllers = CustController.class)
 @Import(value = com.hd.common.dto.Response.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DisplayName(" Item Controller Get Test ")
+@DisplayName(" Cust Controller Get Test ")
 public class ControllerGetTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    ItemService itemService;
+    CustService custService;
+
 
     private ObjectMapper objectMapper;
 
@@ -48,41 +52,47 @@ public class ControllerGetTest {
 
     @Test
     @Order(1)
-    @DisplayName("Item Get 정상")
+    @DisplayName("Cust Get 정상")
     void success1() throws Exception {
 
         //given
-        long id = 10L;
+        String id = "id01";
+        String pwd = "pwd01";
+        String name = "name01";
 
-        given(itemService.get(any())).willReturn(ItemEntity.builder().id(10L).name("p1").price(1000L).build());
+        given(custService.get(any())).willReturn(CustEntity.builder()
+                .id(id)
+                .pwd(pwd)
+                .name(name)
+                .build());
 
         //when
-        ResultActions resultActions= mockMvc.perform(get("/api/item/get/"+id));
+        ResultActions resultActions= mockMvc.perform(get("/api/cust/get/"+id));
 
         //verify
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.id").value(10L))
-                .andExpect(jsonPath("$.data.name").value("p1"))
-                .andExpect(jsonPath("$.data.price").value(1000L))
+                .andExpect(jsonPath("$.data.id").value(id))
+                .andExpect(jsonPath("$.data.name").value(name))
+                .andExpect(jsonPath("$.data.pwd").value(pwd))
                 .andDo(print());
-        verify(itemService).get(id);
+        verify(custService).get(id);
     }
     @Test
     @Order(2)
-    @DisplayName("Item Get Empty 정상")
+    @DisplayName("Cust Get Empty 정상")
     void success2() throws Exception {
 
         //given
-        long id = 10L;
+        String id = "id11";
 
-        given(itemService.get(any())).willThrow(
+        given(custService.get(any())).willThrow(
                 new IdNotFoundException(ErrorCode.ID_NOT_FOUND.getErrorMessage(),
                         ErrorCode.ID_NOT_FOUND)
         );
 
         //when
-        ResultActions resultActions= mockMvc.perform(get("/api/item/get/"+id));
+        ResultActions resultActions= mockMvc.perform(get("/api/cust/get/"+id));
 
         //verify
         resultActions.andDo(print());

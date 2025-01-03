@@ -1,11 +1,12 @@
-package com.hd.v1unit.item;
+package com.hd.v1unit.cust;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hd.common.exception.ErrorCode;
 import com.hd.common.exception.IdNotFoundException;
+import com.hd.v1.app.cust.controller.CustController;
+import com.hd.v1.app.cust.service.CustService;
 import com.hd.v1.app.item.controller.ItemController;
 import com.hd.v1.app.item.service.ItemService;
-import com.hd.v1.common.entity.ItemEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +17,27 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @Slf4j
-@WebMvcTest(controllers = ItemController.class)
+@WebMvcTest(controllers = CustController.class)
+//@AutoConfigureMockMvc
+//@SpringBootTest
 @Import(value = com.hd.common.dto.Response.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DisplayName(" Item Controller Get Test ")
-public class ControllerGetTest {
+@DisplayName(" Cust Controller Delete Test ")
+public class ControllerDeleteTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    ItemService itemService;
+    CustService custService;
 
     private ObjectMapper objectMapper;
 
@@ -48,41 +50,41 @@ public class ControllerGetTest {
 
     @Test
     @Order(1)
-    @DisplayName("Item Get 정상")
+    @DisplayName("Cust Delete 정상")
     void success1() throws Exception {
 
         //given
-        long id = 10L;
+        String id = "id01";
 
-        given(itemService.get(any())).willReturn(ItemEntity.builder().id(10L).name("p1").price(1000L).build());
+
+        //stub
+        given(custService.remove(any())).willReturn(id);
 
         //when
-        ResultActions resultActions= mockMvc.perform(get("/api/item/get/"+id));
+        ResultActions resultActions= mockMvc.perform(delete("/api/cust/"+id));
 
         //verify
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.id").value(10L))
-                .andExpect(jsonPath("$.data.name").value("p1"))
-                .andExpect(jsonPath("$.data.price").value(1000L))
+                .andExpect(jsonPath("$.data").value(id))
                 .andDo(print());
-        verify(itemService).get(id);
+        verify(custService).remove(id);
     }
     @Test
     @Order(2)
-    @DisplayName("Item Get Empty 정상")
+    @DisplayName("ID Not Found 정상")
     void success2() throws Exception {
 
         //given
-        long id = 10L;
+        String id = "id01";
 
-        given(itemService.get(any())).willThrow(
+        given(custService.remove(any())).willThrow(
                 new IdNotFoundException(ErrorCode.ID_NOT_FOUND.getErrorMessage(),
                         ErrorCode.ID_NOT_FOUND)
         );
 
         //when
-        ResultActions resultActions= mockMvc.perform(get("/api/item/get/"+id));
+        ResultActions resultActions= mockMvc.perform(delete("/api/cust/"+id));
 
         //verify
         resultActions.andDo(print());
