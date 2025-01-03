@@ -55,4 +55,13 @@ public class CartService implements HDService<CartEntity, Long> {
         }
         return carts;
     }
+
+    public List<CartEntity> getall(String id) {
+        List<CartEntity> carts = cartRepository.findByCustId(id);
+        if(carts.isEmpty()){
+            throw new DataNotFoundException(ErrorCode.DATA_DOSE_NOT_EXIST.getErrorMessage(), ErrorCode.DATA_DOSE_NOT_EXIST);
+        }
+        return carts;
+    }
+
 }

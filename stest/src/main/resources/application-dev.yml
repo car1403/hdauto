@@ -1,6 +1,6 @@
 # 1. Tomcat Server Setting
 server:
-  port: 80
+  port: 8443
   ssl:
     enabled: true
     key-store: classpath:keystore.p12  # 인증서 파일 경로 <- keystore.p12를

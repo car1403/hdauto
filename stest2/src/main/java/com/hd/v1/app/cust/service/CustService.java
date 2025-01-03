@@ -28,9 +28,9 @@ public class CustService implements HDService<CustEntity, String> {
 
     @Override
     public CustEntity save(CustEntity custEntity) {
-        Optional<CustEntity> item =
+        Optional<CustEntity> cust =
                 custRepository.findById(custEntity.getId());
-        if (item.isPresent()) {
+        if (cust.isPresent()) {
             // Exception
             throw new IdDuplicateException(ErrorCode.ID_DUPLICATED.getErrorMessage(), ErrorCode.ID_DUPLICATED);
         }

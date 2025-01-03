@@ -1,5 +1,7 @@
 package com.hd.v1unit.cart;
 
+import com.hd.common.exception.ErrorCode;
+import com.hd.common.exception.IdNotFoundException;
 import com.hd.v1.app.cart.repository.CartRepository;
 import com.hd.v1.app.cart.service.CartService;
 import com.hd.v1.common.entity.CartEntity;
@@ -15,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -54,64 +57,34 @@ public class ServiceUpdateTest {
     }
 
     @Test
-    @DisplayName("New Cart Add")
+    @DisplayName(" Cart Update")
     @Order(1)
     public void test1(){
-        // given
-        //stub
-        when(cartRepository.save(any())).thenReturn(cartEntity1);
-        // when
-        CartEntity result = cartService.save(cartEntity1);
-        // then verify
-        assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1);
-        assertThat(result.getCnt()).isEqualTo(2);
-        assertThat(result.getItem().getId()).isEqualTo(1);
-        assertThat(result.getCust().getId()).isEqualTo("id01");
-    }
-    @Test
-    @DisplayName("New Cart Add Plus")
-    @Order(2)
-    public void test2(){
         // given
         //stub
         when(cartRepository.findById(any())).thenReturn(Optional.of(cartEntity1));
         when(cartRepository.save(any())).thenReturn(cartEntity3);
         // when
-        CartEntity result = cartService.save(cartEntity3);
+        CartEntity result = cartService.modify(cartEntity3);
         // then verify
         assertThat(result).isNotNull();
-        log.info(result.getCnt().toString());
         assertThat(result.getId()).isEqualTo(1);
-        assertThat(result.getCnt()).isEqualTo(5);
+        assertThat(result.getCnt()).isEqualTo(3);
         assertThat(result.getItem().getId()).isEqualTo(1);
         assertThat(result.getCust().getId()).isEqualTo("id01");
     }
-//
-//    @Test
-//    @DisplayName("Id Duplicated Exception")
-//    @Order(2)
-//    public void test2(){
-//        //given
-//        CustEntity custEntity = CustEntity.builder()
-//                .id(id)
-//                .pwd(pwd)
-//                .name(name)
-//                .build();
-//        CustEntity newCustEntity = CustEntity.builder()
-//                .id(id)
-//                .pwd(pwd)
-//                .name(name)
-//                .build();
-//        //stub
-//        when(custRepository.findById(any())).thenReturn(
-//                Optional.of(custEntity)
-//        );
-//        // when
-//
-//        // then
-//        assertThatThrownBy(() -> custService.save(newCustEntity))
-//                .isInstanceOf(IdDuplicateException.class)
-//                .hasMessageContaining(ErrorCode.ID_DUPLICATED.getErrorMessage());
-//    }
+    @Test
+    @DisplayName(" Cart Update ID Not Found")
+    @Order(2)
+    public void test2(){
+        // given
+        //stub
+
+        // when
+
+        // then verify
+        assertThatThrownBy(() -> cartService.modify(cartEntity1))
+                .isInstanceOf(IdNotFoundException.class)
+                .hasMessage(ErrorCode.ID_NOT_FOUND.getErrorMessage()); // Exception 객체가 가지고있는 메시지 검증
+    }
 }
