@@ -27,7 +27,7 @@ public class CustRequestDto {
             type = "String"
     )
     private String pwd;
-    @NotEmpty(message = "{validation.cust.pwd}")
+    @NotEmpty(message = "{validation.cust.name}")
     @Schema(description = "Input Cust Name",
             example = "name01",
             required = true,

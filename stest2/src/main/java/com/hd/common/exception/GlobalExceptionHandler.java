@@ -37,8 +37,8 @@ public class GlobalExceptionHandler {
             code = ((DataNotFoundException)ex).getErrorCode();
             msg = ((DataNotFoundException)ex).getMessage();
         }else if(ex instanceof  IdDuplicateException){
-            code = ((DataNotFoundException)ex).getErrorCode();
-            msg = ((DataNotFoundException)ex).getMessage();
+            code = ((IdDuplicateException)ex).getErrorCode();
+            msg = ((IdDuplicateException)ex).getMessage();
         }
         return response.fail(code, msg, HttpStatus.INTERNAL_SERVER_ERROR);
     }
