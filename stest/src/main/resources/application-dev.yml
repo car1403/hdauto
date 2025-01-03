@@ -3,9 +3,8 @@ server:
   port: 8443
   ssl:
     enabled: true
-    key-store: classpath:keystore.p12  # 인증서 파일 경로 <- keystore.p12를
-    # src/main/resources밑에 뒀다면 경로 수정 X
-    key-store-password: 111111
+    key-store: classpath:keystore.p12
+    key-store-password: ENC(UwQCPkd7srHBh7xiDJM8Lg==)
     key-store-type: PKCS12  # 인증서 형식
   servlet:
     context-path: /
@@ -31,7 +30,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/stest?characterEncoding=utf8
     username: suser
-    password: 111111
+    password: ENC(UwQCPkd7srHBh7xiDJM8Lg==)
   jpa:
     open-in-view: true
     hibernate:
@@ -53,3 +52,6 @@ logging:
   #  error > info > debug
 
 # 5. Application Environment Setting
+app:
+  jasypt:
+    secret: ${jasypt_secret}
