@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 @Slf4j
 @TestMethodOrder(MethodOrderer.DisplayName.class)
-@DisplayName(" Service Get All Test ")
+@DisplayName(" Item Service Get All Test ")
 @ExtendWith(MockitoExtension.class)
 class ServiceGetAllTest {
     @Mock

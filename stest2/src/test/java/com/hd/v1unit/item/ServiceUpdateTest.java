@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 @Slf4j
 @TestMethodOrder(MethodOrderer.DisplayName.class)
-@DisplayName(" Service Update Test ")
+@DisplayName("  Item Service Update Test ")
 @ExtendWith(MockitoExtension.class)
 class ServiceUpdateTest {
     @Mock

@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 메모리 DB 사용 안함
 @Import(value = com.hd.config.JpaAuditingConfig.class) // JPA Auditing
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DisplayName(" Repository Tests ")
+@DisplayName(" Cart Repository Tests ")
 @ActiveProfiles("h2db")
 class RepositoryTest {
 

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Import(value = com.hd.config.JpaAuditingConfig.class) // JPA Auditing
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
-@DisplayName(" Repository Tests ")
+@DisplayName(" Cust Repository Tests ")
 @ActiveProfiles("h2db")
 class RepositoryTest {
 

@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 메모리 DB 사용 안함
 @Import(value = com.hd.config.JpaAuditingConfig.class) // JPA Auditing
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DisplayName(" Repository Tests ")
-@ActiveProfiles("dev")
+@DisplayName(" Item Repository Tests ")
+@ActiveProfiles("h2db")
 class RepositoryTest {
 
     @Autowired
@@ -40,14 +40,14 @@ class RepositoryTest {
 
         //itemRepository.deleteAll();
         // MySQL
-        entityManager
-                .createNativeQuery("ALTER TABLE db_item AUTO_INCREMENT = 1;") // auto increment 초기화
-                .executeUpdate();
+//        entityManager
+//                .createNativeQuery("ALTER TABLE db_item AUTO_INCREMENT = 1;") // auto increment 초기화
+//                .executeUpdate();
 
 //         H2DB
-//        entityManager
-//                .createNativeQuery("ALTER TABLE db_item ALTER COLUMN id RESTART WITH 1") // auto increment 초기화
-//                .executeUpdate();
+        entityManager
+                .createNativeQuery("ALTER TABLE db_item ALTER COLUMN item_id RESTART WITH 1") // auto increment 초기화
+                .executeUpdate();
     }
 
     @Test

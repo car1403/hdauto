@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @TestMethodOrder(MethodOrderer.DisplayName.class)
-@DisplayName(" Service Get Test ")
+@DisplayName(" Item Service Get Test ")
 @ExtendWith(MockitoExtension.class)
 class ServiceGetTest {
     @Mock
