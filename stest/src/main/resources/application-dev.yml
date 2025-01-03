@@ -53,5 +53,5 @@ logging:
 
 # 5. Application Environment Setting
 app:
-  jasypt:
-    secret: ${jasypt_secret}
+  enc:
+    secret: ${enc_secret}
