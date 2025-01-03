@@ -2,6 +2,7 @@ package com.hd.v1unit.cart;
 
 import com.hd.common.exception.DataNotFoundException;
 import com.hd.common.exception.ErrorCode;
+import com.hd.common.exception.IdNotFoundException;
 import com.hd.v1.app.cart.repository.CartRepository;
 import com.hd.v1.app.cart.service.CartService;
 import com.hd.v1.common.entity.CartEntity;
@@ -25,9 +26,9 @@ import static org.mockito.Mockito.when;
 
 @Slf4j
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DisplayName("Cart Service Get All Test")
+@DisplayName("Cart Service Get Test")
 @ExtendWith(MockitoExtension.class)
-public class ServiceGetAllTest {
+public class ServiceGetTest {
     @Mock
     CartRepository cartRepository;
 
@@ -60,58 +61,31 @@ public class ServiceGetAllTest {
 
     @Test
     @Order(1)
-    @DisplayName("Data Not Found")
+    @DisplayName("Cart Get ")
     void success1() {
         // given
-        List<CartEntity> carts = new ArrayList<>();
-        carts.add(CartEntity.builder().id(1L).cnt(1L)
-                .custEntity(CustEntity.builder().id("id01").build())
-                .itemEntity(ItemEntity.builder().id(1L).build())
-                .build());
-        carts.add(CartEntity.builder().id(2L).cnt(2L)
-                .custEntity(CustEntity.builder().id("id01").build())
-                .itemEntity(ItemEntity.builder().id(2L).build())
-                .build());
-        carts.add(CartEntity.builder().id(3L).cnt(3L)
-                .custEntity(CustEntity.builder().id("id01").build())
-                .itemEntity(ItemEntity.builder().id(3L).build())
-                .build());
-        carts.add(CartEntity.builder().id(4L).cnt(4L)
-                .custEntity(CustEntity.builder().id("id01").build())
-                .itemEntity(ItemEntity.builder().id(4L).build())
-                .build());
-        carts.add(CartEntity.builder().id(5L).cnt(5L)
-                .custEntity(CustEntity.builder().id("id01").build())
-                .itemEntity(ItemEntity.builder().id(5L).build())
-                .build());
 
         // stub
-        when(cartRepository.findAll()).thenReturn(carts);
-
+        when(cartRepository.findById(any())).thenReturn(Optional.of(cartEntity1));
         // when
-        List<CartEntity> bookList = cartService.getall();
-
+        CartEntity result = cartService.get(cartEntity1.getId());
         // then
-        assertThat(bookList.size()).isEqualTo(5);
-        assertThat(bookList.get(0).getCnt()).isEqualTo(carts.get(0).getCnt());
-        assertThat(bookList.get(1).getCnt()).isEqualTo(carts.get(1).getCnt());
-        assertThat(bookList.get(0).getItem().getId()).isEqualTo(carts.get(0).getItem().getId());
-        assertThat(bookList.get(1).getItem().getId()).isEqualTo(carts.get(1).getItem().getId());
-
+        assertThat(result.getId()).isEqualTo(cartEntity1.getId());
+        assertThat(result.getCnt()).isEqualTo(cartEntity1.getCnt());
     }
 
     @Test
     @Order(2)
-    @DisplayName("데이터가 존재 하지 않을때")
+    @DisplayName("ID Not Found")
     void success2() {
         // stub
-
+        Long id = 10L;
         // when
 
         // then
-        assertThatThrownBy(() -> cartService.getall())
-                .isInstanceOf(DataNotFoundException.class)
-                .hasMessage(ErrorCode.DATA_DOSE_NOT_EXIST.getErrorMessage()); // Exception 객체가 가지고있는 메시지 검증
+        assertThatThrownBy(() -> cartService.get(id))
+                .isInstanceOf(IdNotFoundException.class)
+                .hasMessage(ErrorCode.ID_NOT_FOUND.getErrorMessage()); // Exception 객체가 가지고있는 메시지 검증
 
 
     }
