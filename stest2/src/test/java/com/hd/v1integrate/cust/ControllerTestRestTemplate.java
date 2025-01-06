@@ -49,9 +49,9 @@ public class ControllerTestRestTemplate {
     @Order(1)
     public void test1() throws JsonProcessingException {
         // given
-        String id = "id01";
-        String pwd = "pwd01";
-        String name = "james01";
+        String id = "id10";
+        String pwd = "pwd10";
+        String name = "james10";
 
         CustRequestDto custRequestDto =
                 CustRequestDto.builder().id(id).name(name).pwd(pwd).build();
@@ -83,8 +83,8 @@ public class ControllerTestRestTemplate {
     @Order(2)
     public void test2() throws JsonProcessingException {
         // given
-        String id = "id01";
-        String pwd = "pwd01";
+        String id = "id10";
+        String pwd = "pwd10";
         String name = "james22";
 
         CustRequestDto custRequestDto =
@@ -112,8 +112,8 @@ public class ControllerTestRestTemplate {
     @Order(3)
     public void test5() throws JsonProcessingException {
         // given
-        String id = "id01";
-        String pwd = "pwd01";
+        String id = "id10";
+        String pwd = "pwd10";
         String name = "james22";
 
         // when
