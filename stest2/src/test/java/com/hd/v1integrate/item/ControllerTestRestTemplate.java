@@ -58,12 +58,6 @@ public class ControllerTestRestTemplate {
         ResponseEntity<String> responseEntity =
                 testRestTemplate.exchange(getBaseUrl("add"), HttpMethod.POST,requestEntity,String.class);
 
-//        ResponseEntity<String> responseEntity  =
-//               testRestTemplate.postForEntity(
-//                    getBaseUrl("add"),
-//                    itemRequestDto,
-//                    String.class
-//                );
         // then
         log.info(responseEntity.getBody());
         JsonNode jsonNode = objectMapper.readTree(responseEntity.getBody());
