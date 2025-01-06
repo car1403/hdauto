@@ -12,6 +12,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@ToString
 public class CartRequestDto {
     private Long id;
     private Long cnt;

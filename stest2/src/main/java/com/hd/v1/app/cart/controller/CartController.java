@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/cart")
-@Slf4j
 public class CartController {
     private final CartService cartService;
     private final Response response;

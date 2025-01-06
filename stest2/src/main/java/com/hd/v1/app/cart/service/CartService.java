@@ -8,6 +8,7 @@ import com.hd.v1.app.cart.repository.CartRepository;
 import com.hd.v1.common.entity.CartEntity;
 import com.hd.v1.common.entity.CustEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,10 +27,13 @@ public class CartService implements HDService<CartEntity, Long> {
 
     @Override
     public CartEntity save(CartEntity cartEntity) {
-        Optional<CartEntity> item =
-                cartRepository.findById(cartEntity.getId());
-        if (item.isPresent()) {
-            cartEntity.setCnt(cartEntity.getCnt() + item.get().getCnt());
+        if(cartEntity.getId() != null){
+            Optional<CartEntity> item =
+                    cartRepository.findById(cartEntity.getId());
+
+            if (item.isPresent()) {
+                cartEntity.setCnt(cartEntity.getCnt() + item.get().getCnt());
+            }
         }
         return cartRepository.save(cartEntity);
     }

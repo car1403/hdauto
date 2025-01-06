@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableEncryptableProperties
 public class JasyptConfig {
 
-    @Value("${app.jasypt.secret}")
+    @Value("${app.enc.secret}")
     private String KEY;
     private static final String ALGORITHM =  "PBEWithMD5AndDES";
 
